@@ -21,8 +21,8 @@ jobs:
       id: plan
       run: |
         terraform init
-        terraform plan -no-color
-        echo "TF_PLAN=$(terraform plan -no-color)" >> $GITHUB_ENV
+        terraform plan -no-color > plan_output.txt
+        echo "TF_PLAN=$(<plan_output.txt)" >> $GITHUB_ENV
 
     - name: Update README
       run: |
