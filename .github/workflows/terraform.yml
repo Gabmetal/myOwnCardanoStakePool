@@ -29,8 +29,8 @@ jobs:
         READ_ME=$(cat README.md)
         UPDATED_READ_ME="${READ_ME/Última ejecución: (aquí se actualizará el estado)/Última ejecución: $PLAN_OUTPUT}"
         echo "$UPDATED_READ_ME" > README.md
-        git config --global user.name 'Your Name'
-        git config --global user.email 'your-email@example.com'
+        git config --global user.name 'Automation'
+        git config --global user.email 'automation@bot.com'
         git add README.md
         git commit -m "Actualizar README con el estado de Terraform"
         git push
