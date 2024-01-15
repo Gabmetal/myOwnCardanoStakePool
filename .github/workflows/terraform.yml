@@ -20,6 +20,7 @@ jobs:
     - name: Terraform Plan
       id: plan
       run: |
+        terraform init
         terraform plan -no-color
         echo "TF_PLAN=$(terraform plan -no-color)" >> $GITHUB_ENV
 
@@ -32,5 +33,5 @@ jobs:
         git config --global user.name 'Automation'
         git config --global user.email 'automation@bot.com'
         git add README.md
-        git commit -m "Actualizar README con el estado de Terraform"
+        git commit -m "Actualizar README con el estado de Terraform [skip ci]"
         git push
