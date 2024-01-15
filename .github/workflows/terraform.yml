@@ -21,15 +21,18 @@ jobs:
       id: plan
       run: |
         terraform init
-        terraform plan -no-color > plan_output.txt
-        echo "TF_PLAN=$(<plan_output.txt)" >> $GITHUB_ENV
+        if terraform plan -no-color; then
+          echo "PLAN_STATUS=success" >> $GITHUB_ENV
+        else
+          echo "PLAN_STATUS=failed" >> $GITHUB_ENV
+        fi
 
     - name: Update README
+      if: always()
       run: |
-        PLAN_OUTPUT="${{ env.TF_PLAN }}"
-        READ_ME=$(cat README.md)
-        UPDATED_READ_ME="${READ_ME/Última ejecución: (aquí se actualizará el estado)/Última ejecución: $PLAN_OUTPUT}"
-        echo "$UPDATED_READ_ME" > README.md
+        PLAN_STATUS="${{ env.PLAN_STATUS }}"
+        BADGE_URL="https://img.shields.io/badge/Terraform-Plan-${PLAN_STATUS}-brightgreen"
+        sed -i "s|![Terraform Plan Status].*|![Terraform Plan Status](${BADGE_URL})|" README.md
         git config --global user.name 'Automation'
         git config --global user.email 'automation@bot.com'
         git add README.md
