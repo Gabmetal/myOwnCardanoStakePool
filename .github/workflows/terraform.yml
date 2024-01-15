@@ -36,7 +36,7 @@ jobs:
         PLAN_STATUS="${{ env.PLAN_STATUS }}"
         BADGE_COLOR="${{ env.BADGE_COLOR }}"
         BADGE_URL="https://img.shields.io/badge/Terraform_Plan-${PLAN_STATUS}-${BADGE_COLOR}"
-        sed -i "s|![Terraform Plan Status](https://img.shields.io/badge/Terraform_Plan-.*|![Terraform Plan Status](${BADGE_URL})|" README.md
+        sed -i "s|https://img.shields.io/badge/Terraform_Plan-.*|${BADGE_URL}|" README.md
         git config --global user.name 'Automation'
         git config --global user.email 'automation@bot.com'
         git add README.md
