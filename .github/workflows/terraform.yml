@@ -12,21 +12,25 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Terraform Plan
-      id: plan
+    - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
       with:
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+    - name: Terraform Plan
+      id: plan
       run: |
-        terraform plan
+        terraform plan -no-color
+        echo "TF_PLAN=$(terraform plan -no-color)" >> $GITHUB_ENV
 
     - name: Update README
       run: |
-        PLAN_OUTPUT="${{ steps.plan.outputs.stdout }}"
+        PLAN_OUTPUT="${{ env.TF_PLAN }}"
         READ_ME=$(cat README.md)
         UPDATED_READ_ME="${READ_ME/Última ejecución: (aquí se actualizará el estado)/Última ejecución: $PLAN_OUTPUT}"
         echo "$UPDATED_READ_ME" > README.md
-        git config --global user.name 'Automation Bot'
-        git config --global user.email 'automation@automation.com
-        git commit -am "Actualizar README con el estado de Terraform [skip ci]"
+        git config --global user.name 'Your Name'
+        git config --global user.email 'your-email@example.com'
+        git add README.md
+        git commit -m "Actualizar README con el estado de Terraform"
         git push
